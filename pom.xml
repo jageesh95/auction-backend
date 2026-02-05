@@ -92,7 +92,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<finalName>backend-0.0.1-SNAPSHOT</finalName>
 	</build>
 
 </project>
