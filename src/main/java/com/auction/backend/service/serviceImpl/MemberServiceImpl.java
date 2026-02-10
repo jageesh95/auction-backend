@@ -2,6 +2,7 @@ package com.auction.backend.service.serviceImpl;
 
 import com.auction.backend.dto.MembersDto;
 import com.auction.backend.entity.Members;
+import com.auction.backend.exception.ResourceNotFoundException;
 import com.auction.backend.repository.MembersRepository;
 import com.auction.backend.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +54,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MembersDto updateMember(Long id, MembersDto dto) {
+        Members member = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found"));
 
-        return null;
+        member.setName(dto.getName());
+        member.setTeamName(dto.getTeamName());
+        return convertToDto(repo.save(member));
     }
 
     @Override
