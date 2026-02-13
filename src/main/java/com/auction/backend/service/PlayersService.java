@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface PlayersService
 {
-    PlayerDto create(PlayerDto dto, MultipartFile image) throws IOException;
+    PlayerDto create(PlayerDto dto) ;
 
     List<PlayerDto> getAll();
 
     PlayerDto getById(Long id);
 
-    PlayerDto update(Long id, PlayerDto dto, MultipartFile image) throws IOException;
+    PlayerDto update(Long id, MultipartFile image) throws IOException;
 
     void delete(Long id);
 }

@@ -18,21 +18,18 @@ public class PlayersController {
 
     private final PlayersService service;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public PlayerDto create(
-            @RequestParam String name,
-            @RequestParam String position,
-            @RequestParam Integer age,
-            @RequestParam Double basePrice,
-            @RequestParam MultipartFile image
-    ) throws IOException {
+    @PostMapping()
+    public PlayerDto create(@RequestBody PlayerDto dto) {
+        return service.create(dto);
+    }
 
-        PlayerDto dto = new PlayerDto();
-        dto.setName(name);
-        dto.setPosition(position);
-        dto.setBasePrice(basePrice);
-
-        return service.create(dto, image);
+    @PostMapping("/image/{id}")
+    public PlayerDto updloadImage(@PathVariable final  Long id, @RequestParam final MultipartFile file) throws IOException {
+        System.out.println("id - "+id);
+        System.out.println("file"+ file.getBytes());
+        System.out.println("file"+ file.getName());
+        PlayerDto dto= service.update(id,file);
+        return  dto;
     }
 
     @GetMapping
@@ -60,7 +57,7 @@ public class PlayersController {
         dto.setPosition(position);
         dto.setBasePrice(basePrice);
 
-        return service.update(id, dto, image);
+        return service.update(id ,image);
     }
 
     @DeleteMapping("/{id}")

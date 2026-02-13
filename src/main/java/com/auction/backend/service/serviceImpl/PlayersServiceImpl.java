@@ -19,14 +19,19 @@ public class PlayersServiceImpl implements PlayersService {
     private final ImageService imageService;
 
     @Override
-    public PlayerDto create(PlayerDto dto, MultipartFile image) throws IOException {
+    public PlayerDto create(PlayerDto dto) {
 
-        String imageUrl = imageService.upload(image);
 
-        Players player = mapToEntity(dto);
-        player.setImageUrl(imageUrl);
 
-        return mapToDto(repo.save(player));
+
+        Players player = new Players();
+        player.setAge(dto.getAge());
+        player.setName(dto.getName());
+        player.setPosition(dto.getPosition());
+        player.setBasePrice(dto.getBasePrice());
+
+        Players save=repo.save(player);
+        return mapToDto(save);
     }
 
     @Override
@@ -43,19 +48,18 @@ public class PlayersServiceImpl implements PlayersService {
     }
 
     @Override
-    public PlayerDto update(Long id, PlayerDto dto, MultipartFile image) throws IOException {
+    public PlayerDto update(Long id, MultipartFile image) throws IOException {
 
-        Players player = repo.findById(id).orElseThrow();
+        Players player = repo.findById(id).orElseThrow(()-> new RuntimeException("Player not found"));
+        String imageUrl="";
 
-        player.setName(dto.getName());
-        player.setPosition(dto.getPosition());
-        player.setBasePrice(dto.getBasePrice());
 
         if (image != null && !image.isEmpty()) {
-            player.setImageUrl(imageService.upload(image));
+            imageUrl=(imageService.upload(image));
         }
-
-        return mapToDto(repo.save(player));
+        player.setImageUrl(imageUrl);
+        Players save=repo.save(player);
+        return mapToDto(save);
     }
 
     @Override
@@ -66,6 +70,7 @@ public class PlayersServiceImpl implements PlayersService {
     private Players mapToEntity(PlayerDto dto) {
         return new Players(
                 dto.getId(),
+                dto.getAge(),
                 dto.getName(),
                 dto.getPosition(),
                 dto.getBasePrice(),
@@ -76,6 +81,7 @@ public class PlayersServiceImpl implements PlayersService {
     private PlayerDto mapToDto(Players p) {
         PlayerDto dto = new PlayerDto();
         dto.setId(p.getId());
+        dto.setAge(p.getAge());
         dto.setName(p.getName());
         dto.setPosition(p.getPosition());
         dto.setBasePrice(p.getBasePrice());
