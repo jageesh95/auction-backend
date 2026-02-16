@@ -29,6 +29,7 @@ public class PlayersServiceImpl implements PlayersService {
         player.setName(dto.getName());
         player.setPosition(dto.getPosition());
         player.setBasePrice(dto.getBasePrice());
+        player.setNationality(dto.getNationality());
 
         Players save=repo.save(player);
         return mapToDto(save);
@@ -74,7 +75,8 @@ public class PlayersServiceImpl implements PlayersService {
                 dto.getName(),
                 dto.getPosition(),
                 dto.getBasePrice(),
-                dto.getImageUrl()
+                dto.getImageUrl(),
+                dto.getNationality()
         );
     }
 
@@ -86,6 +88,7 @@ public class PlayersServiceImpl implements PlayersService {
         dto.setPosition(p.getPosition());
         dto.setBasePrice(p.getBasePrice());
         dto.setImageUrl(p.getImageUrl());
+        dto.setNationality(p.getNationality());
         return dto;
     }
 }

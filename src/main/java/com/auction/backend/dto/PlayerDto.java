@@ -12,4 +12,5 @@ public class PlayerDto {
     private String position;
     private Double basePrice;
     private String imageUrl;
+    private String nationality;
 }

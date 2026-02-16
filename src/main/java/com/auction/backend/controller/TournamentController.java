@@ -4,9 +4,17 @@ import com.auction.backend.dto.AssignTeamsRequest;
 import com.auction.backend.dto.TournamentRequest;
 import com.auction.backend.dto.TournamentResponse;
 import com.auction.backend.dto.UpdateScoreRequest;
+import com.auction.backend.entity.Match;
+import com.auction.backend.entity.Standing;
+import com.auction.backend.entity.Tournament;
+import com.auction.backend.repository.MatchRepository;
+import com.auction.backend.repository.StandingRepository;
+import com.auction.backend.repository.TournamentRepository;
 import com.auction.backend.service.TournamentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/tournaments")
@@ -14,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 public class TournamentController {
 
     private final TournamentService tournamentService;
+    private final TournamentRepository tournamentRepository;
+    private final StandingRepository standingRepository;
+    private final MatchRepository matchRepository;
 
     @PostMapping
     public TournamentResponse createTournament(
@@ -44,5 +55,21 @@ public class TournamentController {
 
         tournamentService.updateMatchScore(matchId, request);
         return "Score updated successfully";
+    }
+    @GetMapping("/{tournamentId}/standings")
+    public List<Standing> getStandings(@PathVariable Long tournamentId) {
+
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow();
+
+        return standingRepository
+                .findByTournamentOrderByPointsDescGoalDifferenceDescGoalsForDesc(tournament);
+    }
+    @GetMapping("/{tournamentId}/matches")
+    public List<Match> getMatch(@PathVariable Long tournamentId){
+
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow();
+        return matchRepository.findByTournament(tournament);
     }
 }
