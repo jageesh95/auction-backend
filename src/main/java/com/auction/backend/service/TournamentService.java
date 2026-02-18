@@ -5,6 +5,8 @@ import com.auction.backend.dto.TournamentRequest;
 import com.auction.backend.dto.TournamentResponse;
 import com.auction.backend.dto.UpdateScoreRequest;
 
+import java.util.List;
+
 public interface TournamentService {
 
     TournamentResponse createTournament(TournamentRequest request);
@@ -12,4 +14,6 @@ public interface TournamentService {
     void generateMatches(Long tournamentId);
 
     void updateMatchScore(Long matchId, UpdateScoreRequest request);
+
+    List<TournamentResponse> getAll();
 }

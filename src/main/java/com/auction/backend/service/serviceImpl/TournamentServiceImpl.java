@@ -172,6 +172,16 @@ public class TournamentServiceImpl implements TournamentService {
         checkAndCompleteTournament(match.getTournament());
     }
 
+    @Override
+    public List<TournamentResponse> getAll() {
+       List<Tournament> data= tournamentRepository.findAll();
+       List<TournamentResponse> response=new ArrayList<>();
+       for(Tournament val:data){
+           response.add(mapToDto(val));
+       }
+       return response;
+    }
+
     private void checkAndCompleteTournament(Tournament tournament) {
 
         long remainingMatches = matchRepository
@@ -231,6 +241,20 @@ public class TournamentServiceImpl implements TournamentService {
 
         standingRepository.save(standingA);
         standingRepository.save(standingB);
+
+    }
+
+    private TournamentResponse mapToDto(Tournament t){
+
+
+        return TournamentResponse.builder()
+                .id(t.getId())
+                .name(t.getName())
+                .status(t.getStatus())
+                .startDate(t.getStartDate())
+                .endDate(t.getEndDate())
+                .build();
+
 
     }
 }

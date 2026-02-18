@@ -32,6 +32,10 @@ public class TournamentController {
 
         return tournamentService.createTournament(request);
     }
+    @GetMapping
+    public List<TournamentResponse> getTournament(){
+        return tournamentService.getAll();
+    }
     @PostMapping("/{tournamentId}/teams")
     public String assignTeams(
             @PathVariable Long tournamentId,
