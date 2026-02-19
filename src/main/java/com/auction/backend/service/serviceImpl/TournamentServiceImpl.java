@@ -50,8 +50,9 @@ public class TournamentServiceImpl implements TournamentService {
     }
     @Transactional
     @Override
-    public void assignTeams(Long tournamentId, AssignTeamsRequest request) {
+    public String assignTeams(Long tournamentId, AssignTeamsRequest request) {
 
+        String result="";
         Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new RuntimeException("Tournament not found"));
 
@@ -70,35 +71,39 @@ public class TournamentServiceImpl implements TournamentService {
                             .findByTournamentAndTeam(tournament, team)
                             .isPresent();
 
-            if (alreadyExists) {
-                continue; // skip duplicate
+            if (!alreadyExists) {
+
+                // insert into mapping table
+                TournamentTeam mapping = TournamentTeam.builder()
+                        .tournament(tournament)
+                        .team(team)
+                        .build();
+
+                tournamentTeamRepository.save(mapping);
+
+                // create initial standing row
+                Standing standing = Standing.builder()
+                        .tournament(tournament)
+                        .team(team)
+                        .played(0)
+                        .win(0)
+                        .draw(0)
+                        .loss(0)
+                        .goalsFor(0)
+                        .goalsAgainst(0)
+                        .goalDifference(0)
+                        .points(0)
+                        .build();
+
+                standingRepository.save(standing);
+                result="added successfully";
+            }
+            else{
+                result="team already present";
             }
 
-            // insert into mapping table
-            TournamentTeam mapping = TournamentTeam.builder()
-                    .tournament(tournament)
-                    .team(team)
-                    .build();
-
-            tournamentTeamRepository.save(mapping);
-
-            // create initial standing row
-            Standing standing = Standing.builder()
-                    .tournament(tournament)
-                    .team(team)
-                    .played(0)
-                    .win(0)
-                    .draw(0)
-                    .loss(0)
-                    .goalsFor(0)
-                    .goalsAgainst(0)
-                    .goalDifference(0)
-                    .points(0)
-                    .build();
-
-            standingRepository.save(standing);
-
         }
+        return result;
     }
 
     @Override

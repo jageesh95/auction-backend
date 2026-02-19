@@ -10,7 +10,7 @@ import java.util.List;
 public interface TournamentService {
 
     TournamentResponse createTournament(TournamentRequest request);
-    void assignTeams(Long tournamentId, AssignTeamsRequest request);
+    String assignTeams(Long tournamentId, AssignTeamsRequest request);
     void generateMatches(Long tournamentId);
 
     void updateMatchScore(Long matchId, UpdateScoreRequest request);

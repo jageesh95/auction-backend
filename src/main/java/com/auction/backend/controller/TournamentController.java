@@ -41,8 +41,7 @@ public class TournamentController {
             @PathVariable Long tournamentId,
             @RequestBody AssignTeamsRequest request) {
 
-        tournamentService.assignTeams(tournamentId, request);
-        return "Teams assigned successfully";
+        return tournamentService.assignTeams(tournamentId, request);
     }
 
     @PostMapping("/{tournamentId}/generate-matches")
