@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MatchRepository extends JpaRepository<Match,Long> {
-    List<Match> findByTournament(Tournament tournament);
+    List<Match> findByTournamentOrderByIdAsc(Tournament tournament);
+
 
     List<Match> findByTournamentAndStatus(Tournament tournament, MatchStatus status);
 

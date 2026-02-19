@@ -1,9 +1,6 @@
 package com.auction.backend.service.serviceImpl;
 
-import com.auction.backend.dto.AssignTeamsRequest;
-import com.auction.backend.dto.TournamentRequest;
-import com.auction.backend.dto.TournamentResponse;
-import com.auction.backend.dto.UpdateScoreRequest;
+import com.auction.backend.dto.*;
 import com.auction.backend.entity.*;
 import com.auction.backend.enums.MatchStatus;
 import com.auction.backend.enums.TournamentStatus;
@@ -177,14 +174,27 @@ public class TournamentServiceImpl implements TournamentService {
         checkAndCompleteTournament(match.getTournament());
     }
 
+
+    @Override
+    public List<MatchResponse> getMatchesByTournament(Long tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new RuntimeException("Tournament not found"));
+
+        List<Match> matches = matchRepository
+                .findByTournamentOrderByIdAsc(tournament);
+
+        return matches.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
     @Override
     public List<TournamentResponse> getAll() {
-       List<Tournament> data= tournamentRepository.findAll();
-       List<TournamentResponse> response=new ArrayList<>();
-       for(Tournament val:data){
-           response.add(mapToDto(val));
-       }
-       return response;
+        List<Tournament> data= tournamentRepository.findAll();
+        List<TournamentResponse> response=new ArrayList<>();
+        for(Tournament val:data){
+            response.add(mapToDto(val));
+        }
+        return response;
     }
 
     private void checkAndCompleteTournament(Tournament tournament) {
@@ -249,6 +259,17 @@ public class TournamentServiceImpl implements TournamentService {
 
     }
 
+    private MatchResponse mapToResponse(Match match) {
+
+        return MatchResponse.builder()
+                .matchId(match.getId())
+                .teamAName(match.getTeamA().getName())
+                .teamBName(match.getTeamB().getName())
+                .scoreA(match.getScoreA())
+                .scoreB(match.getScoreB())
+                .status(match.getStatus().name())
+                .build();
+    }
     private TournamentResponse mapToDto(Tournament t){
 
 

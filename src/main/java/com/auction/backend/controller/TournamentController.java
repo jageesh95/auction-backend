@@ -1,9 +1,6 @@
 package com.auction.backend.controller;
 
-import com.auction.backend.dto.AssignTeamsRequest;
-import com.auction.backend.dto.TournamentRequest;
-import com.auction.backend.dto.TournamentResponse;
-import com.auction.backend.dto.UpdateScoreRequest;
+import com.auction.backend.dto.*;
 import com.auction.backend.entity.Match;
 import com.auction.backend.entity.Standing;
 import com.auction.backend.entity.Tournament;
@@ -31,6 +28,12 @@ public class TournamentController {
             @RequestBody TournamentRequest request) {
 
         return tournamentService.createTournament(request);
+    }
+    @GetMapping("/{tournamentId}/matches")
+    public List<MatchResponse> getTournamentMatches(
+            @PathVariable Long tournamentId) {
+
+        return tournamentService.getMatchesByTournament(tournamentId);
     }
     @GetMapping
     public List<TournamentResponse> getTournament(){
@@ -68,11 +71,5 @@ public class TournamentController {
         return standingRepository
                 .findByTournamentOrderByPointsDescGoalDifferenceDescGoalsForDesc(tournament);
     }
-    @GetMapping("/{tournamentId}/matches")
-    public List<Match> getMatch(@PathVariable Long tournamentId){
 
-        Tournament tournament = tournamentRepository.findById(tournamentId)
-                .orElseThrow();
-        return matchRepository.findByTournament(tournament);
-    }
 }

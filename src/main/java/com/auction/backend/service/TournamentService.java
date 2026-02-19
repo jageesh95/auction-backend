@@ -1,9 +1,6 @@
 package com.auction.backend.service;
 
-import com.auction.backend.dto.AssignTeamsRequest;
-import com.auction.backend.dto.TournamentRequest;
-import com.auction.backend.dto.TournamentResponse;
-import com.auction.backend.dto.UpdateScoreRequest;
+import com.auction.backend.dto.*;
 
 import java.util.List;
 
@@ -15,5 +12,6 @@ public interface TournamentService {
 
     void updateMatchScore(Long matchId, UpdateScoreRequest request);
 
+    List<MatchResponse> getMatchesByTournament(Long tournamentId);
     List<TournamentResponse> getAll();
 }
