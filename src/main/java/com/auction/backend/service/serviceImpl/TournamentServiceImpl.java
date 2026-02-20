@@ -197,6 +197,22 @@ public class TournamentServiceImpl implements TournamentService {
         return response;
     }
 
+    @Override
+    public List<MatchResponse> getMatchesByStatus(Long tournamentId, MatchStatus status) {
+        return null;
+    }
+
+    @Override
+    public List<MatchResponse> getMatchesByTeam(Long teamId) {
+      //  return matchRepository.findMatchesByTeamId(teamId);
+        return null;
+    }
+
+    @Override
+    public MatchResponse getMatch(Long matchId) {
+        return null;
+    }
+
     private void checkAndCompleteTournament(Tournament tournament) {
 
         long remainingMatches = matchRepository
@@ -282,5 +298,34 @@ public class TournamentServiceImpl implements TournamentService {
                 .build();
 
 
+    }
+
+    @Override
+    public List<TournamentTeamResponse> getAllTournaments() {
+
+        List<Tournament> tournaments = tournamentRepository.findAllWithTeams();
+
+        return tournaments.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    private TournamentTeamResponse mapToResponse(Tournament tournament) {
+
+        List<TeamDTO> teams = tournament.getTournamentTeams()
+                .stream()
+                .map(tt -> new TeamDTO(
+                        tt.getTeam().getId(),
+                        tt.getTeam().getTeamName(),
+                        tt.getTeam().getName()
+                ))
+                .toList();
+
+        return TournamentTeamResponse.builder()
+                .id(tournament.getId())
+                .name(tournament.getName())
+                .status(tournament.getStatus().name())
+                .teams(teams)
+                .build();
     }
 }

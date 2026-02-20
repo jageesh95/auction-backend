@@ -40,6 +40,8 @@ public class Tournament {
     // One tournament → many standings
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
     private List<Standing> standings;
+    @OneToMany(mappedBy = "tournament")
+    private List<TournamentTeam> tournamentTeams;
 
 
 }

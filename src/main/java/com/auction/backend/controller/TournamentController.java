@@ -4,6 +4,7 @@ import com.auction.backend.dto.*;
 import com.auction.backend.entity.Match;
 import com.auction.backend.entity.Standing;
 import com.auction.backend.entity.Tournament;
+import com.auction.backend.enums.MatchStatus;
 import com.auction.backend.repository.MatchRepository;
 import com.auction.backend.repository.StandingRepository;
 import com.auction.backend.repository.TournamentRepository;
@@ -70,6 +71,29 @@ public class TournamentController {
 
         return standingRepository
                 .findByTournamentOrderByPointsDescGoalDifferenceDescGoalsForDesc(tournament);
+    }
+
+    @GetMapping("/{tournamentId}/matches/status/{status}")
+    public List<MatchResponse> getMatchesByStatus(
+            @PathVariable Long tournamentId,
+            @PathVariable MatchStatus status) {
+
+        return tournamentService.getMatchesByStatus(tournamentId, status);
+    }
+
+    @GetMapping("/team/{teamId}/matches")
+    public List<MatchResponse> getMatchesByTeam(@PathVariable Long teamId) {
+        return tournamentService.getMatchesByTeam(teamId);
+    }
+
+    @GetMapping("/matches/{matchId}")
+    public MatchResponse getMatch(@PathVariable Long matchId) {
+        return tournamentService.getMatch(matchId);
+    }
+
+    @GetMapping("tournamentTeams")
+    public List<TournamentTeamResponse> getAllTournaments() {
+        return tournamentService.getAllTournaments();
     }
 
 }
