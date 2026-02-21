@@ -1,5 +1,6 @@
 package com.auction.backend.repository;
 
+import com.auction.backend.dto.StandingResponse;
 import com.auction.backend.entity.Match;
 import com.auction.backend.entity.Tournament;
 import com.auction.backend.enums.TournamentStatus;
@@ -19,4 +20,6 @@ public interface TournamentRepository extends JpaRepository<Tournament,Long> {
        LEFT JOIN FETCH tt.team
        """)
     List<Tournament> findAllWithTeams();
+
+
 }

@@ -1,6 +1,7 @@
 package com.auction.backend.service;
 
 import com.auction.backend.dto.*;
+import com.auction.backend.entity.Tournament;
 import com.auction.backend.enums.MatchStatus;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface TournamentService {
 
     MatchResponse getMatch(Long matchId);
     List<TournamentTeamResponse> getAllTournaments();
+
+    List<StandingResponse> getStandings(Tournament tournament);
 }

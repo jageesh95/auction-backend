@@ -75,13 +75,13 @@ public class TournamentController {
         return "Score updated successfully";
     }
     @GetMapping("/{tournamentId}/standings")
-    public List<Standing> getStandings(@PathVariable Long tournamentId) {
+    public List<StandingResponse> getStandings(@PathVariable Long tournamentId) {
 
         Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow();
+        List<StandingResponse> standings=tournamentService.getStandings(tournament);
 
-        return standingRepository
-                .findByTournamentOrderByPointsDescGoalDifferenceDescGoalsForDesc(tournament);
+        return standings;
     }
 
     @GetMapping("/{tournamentId}/matches/status/{status}")

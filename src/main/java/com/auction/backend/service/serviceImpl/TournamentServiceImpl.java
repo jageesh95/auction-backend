@@ -211,6 +211,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public List<MatchResponse> getMatchesByStatus(Long tournamentId, MatchStatus status) {
+
         return null;
     }
 
@@ -320,6 +321,29 @@ public class TournamentServiceImpl implements TournamentService {
         return tournaments.stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    @Override
+    public List<StandingResponse> getStandings(Tournament tournament) {
+        List<Standing> res=standingRepository
+                .findByTournamentOrderByPointsDescGoalDifferenceDescGoalsForDesc(tournament);
+        List<StandingResponse> list=new ArrayList<>();
+        for(Standing standing:res){
+            StandingResponse standingResponse=new StandingResponse();
+            standingResponse.setId(standing.getId());
+            standingResponse.setName(standing.getTeam().getName());
+            standingResponse.setTeamName(standing.getTeam().getTeamName());
+            standingResponse.setDraw(standing.getDraw());
+            standingResponse.setLoss(standing.getLoss());
+            standingResponse.setGoalsAgainst(standing.getGoalsAgainst());
+            standingResponse.setGoalDifference(standing.getGoalDifference());
+            standingResponse.setWin(standing.getWin());
+            standingResponse.setPlayed(standing.getPlayed());
+            standingResponse.setGoalsFor(standing.getGoalsFor());
+            list.add(standingResponse);
+
+        }
+        return list;
     }
 
     private TournamentTeamResponse mapToResponse(Tournament tournament) {
