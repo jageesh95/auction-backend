@@ -4,6 +4,7 @@ import com.auction.backend.dto.*;
 import com.auction.backend.entity.*;
 import com.auction.backend.enums.MatchStatus;
 import com.auction.backend.enums.TournamentStatus;
+import com.auction.backend.exception.ResourceNotFoundException;
 import com.auction.backend.repository.*;
 import com.auction.backend.service.TournamentService;
 import jakarta.transaction.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -45,6 +47,16 @@ public class TournamentServiceImpl implements TournamentService {
                 .endDate(saved.getEndDate())
                 .build();
     }
+
+    @Override
+    public TournamentResponse updateTournament(Long id,TournamentRequest request) {
+        Tournament tournament = tournamentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member not found"));
+        tournament.setName(request.getName());
+        Tournament saved =tournamentRepository.save(tournament);
+
+        return mapToDto(saved);
+    }
+
     @Transactional
     @Override
     public String assignTeams(Long tournamentId, AssignTeamsRequest request) {

@@ -10,6 +10,7 @@ import com.auction.backend.repository.StandingRepository;
 import com.auction.backend.repository.TournamentRepository;
 import com.auction.backend.service.TournamentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,16 @@ public class TournamentController {
             @RequestBody TournamentRequest request) {
 
         return tournamentService.createTournament(request);
+    }
+    @PutMapping("/{id}")
+    public TournamentResponse editTournament( Long id,TournamentRequest request) {
+
+        return tournamentService.updateTournament(id,request);
+    }
+    @DeleteMapping("/{id}")
+    ResponseEntity<String> deleteById(Long id){
+        tournamentRepository.deleteById(id);
+        return  ResponseEntity.ok("successfully deleted");
     }
     @GetMapping("/{tournamentId}/matches")
     public List<MatchResponse> getTournamentMatches(

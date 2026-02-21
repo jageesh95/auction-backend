@@ -34,13 +34,13 @@ public class Tournament {
     private LocalDate endDate;
 
     // One tournament → many matches
-    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Match> matches;
 
     // One tournament → many standings
-    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Standing> standings;
-    @OneToMany(mappedBy = "tournament")
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TournamentTeam> tournamentTeams;
 
 

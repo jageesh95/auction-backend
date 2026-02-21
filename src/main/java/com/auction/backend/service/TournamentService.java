@@ -8,6 +8,7 @@ import java.util.List;
 public interface TournamentService {
 
     TournamentResponse createTournament(TournamentRequest request);
+    TournamentResponse updateTournament(Long id,TournamentRequest request);
     String assignTeams(Long tournamentId, AssignTeamsRequest request);
     void generateMatches(Long tournamentId);
 
