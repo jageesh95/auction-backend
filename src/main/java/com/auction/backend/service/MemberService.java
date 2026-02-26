@@ -1,5 +1,6 @@
 package com.auction.backend.service;
 
+import com.auction.backend.dto.CreateMemberRequest;
 import com.auction.backend.dto.MembersDto;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,7 @@ import java.util.List;
 @Service
 public interface MemberService {
 
-    MembersDto createMember(MembersDto dto);
+    MembersDto createMember(CreateMemberRequest dto);
     MembersDto getMember(Long id);
     List<MembersDto> getAllMembers();
 

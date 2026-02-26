@@ -1,5 +1,6 @@
 package com.auction.backend.controller;
 
+import com.auction.backend.dto.CreateMemberRequest;
 import com.auction.backend.dto.MembersDto;
 import com.auction.backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class MembersController {
         this.memberService = memberService;
     }
     @PostMapping
-    public MembersDto create(@RequestBody MembersDto membersDto){
-       return memberService.createMember(membersDto);
+    public MembersDto create(@RequestBody CreateMemberRequest request){
+       return memberService.createMember(request);
     }
 
     @GetMapping

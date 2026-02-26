@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name="users")
+@Table(name="members")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,10 +12,11 @@ public class Members {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String email;
     private String name;
-    private String password;
     private String teamName;
-    private String role="member";
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
