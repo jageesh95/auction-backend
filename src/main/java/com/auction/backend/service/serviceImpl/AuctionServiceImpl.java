@@ -3,6 +3,7 @@ package com.auction.backend.service.serviceImpl;
 import com.auction.backend.entity.*;
 import com.auction.backend.enums.AuctionStatus;
 import com.auction.backend.enums.PlayerAuctionStatus;
+import com.auction.backend.enums.TransactionType;
 import com.auction.backend.repository.*;
 import com.auction.backend.service.AuctionService;
 import jakarta.transaction.Transactional;
@@ -20,7 +21,8 @@ public class AuctionServiceImpl implements AuctionService {
     private final AuctionPlayerRepository auctionPlayerRepository;
     private final BidRepository bidRepository;
     private final TournamentTeamRepository tournamentTeamRepository;
-    private final TournamentRepository tournamentRepository;
+    private final BudgetTransactionRepository budgetTransactionRepository;
+
 
     @Override
     @Transactional
@@ -109,12 +111,13 @@ public class AuctionServiceImpl implements AuctionService {
             throw new RuntimeException("Team not registered in tournament");
         }
 
-        Optional<Tournament> tournament=tournamentRepository.findById(auction.getTournamentId());
+        // in future mplementation
+        /*Optional<Tournament> tournament=tournamentRepository.findById(auction.getTournamentId());
 
         // 🚨 PLAYER LIMIT CHECK
         if(tournamentTeam.getPlayersBought() >= tournament.get().getMaxPlayers()){
             throw new RuntimeException("Team already reached maximum player limit");
-        }
+        }*/
         // 🚨 BALANCE CHECK
         if(tournamentTeam.getBalance() < amount){
             throw new RuntimeException("Insufficient balance");
@@ -196,6 +199,19 @@ public class AuctionServiceImpl implements AuctionService {
             tm.setTotalSpent( (tm.getTotalSpent() + player.getCurrentHighestBid()));
             tm.setPlayersBought(tm.getPlayersBought() +1);
             tournamentTeamRepository.save(tm);
+
+            BudgetTransaction tx = new BudgetTransaction();
+
+            tx.setTournamentId(auction.getTournamentId());
+            tx.setMemberId(player.getCurrentHighestBidUserId());
+            tx.setAuctionPlayerId(player.getId());
+            tx.setAmount(player.getCurrentHighestBid());
+            tx.setTransactionType(TransactionType.DEBIT);
+            tx.setBalanceBefore(tm.getBalance());
+            tx.setBalanceAfter(tm.getBalance() - player.getCurrentHighestBid());
+            tx.setDescription("Player purchased in auction");
+            tx.setCreatedAt(LocalDateTime.now());
+            budgetTransactionRepository.save(tx);
 
             player.setStatus(PlayerAuctionStatus.SOLD);
             player.setSoldAmount(player.getCurrentHighestBid());
