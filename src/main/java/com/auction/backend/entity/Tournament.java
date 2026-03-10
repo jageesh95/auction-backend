@@ -43,5 +43,9 @@ public class Tournament {
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TournamentTeam> tournamentTeams;
 
+    private Double defaultBalance;
+    private Integer minPlayers;
+    private Integer maxPlayers;
+
 
 }

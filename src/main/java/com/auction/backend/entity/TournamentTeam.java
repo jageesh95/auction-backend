@@ -27,4 +27,8 @@ public class TournamentTeam {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", nullable = false)
     private Members team;
+
+    private Double balance;
+    private Double totalSpent;
+    private Integer playersBought;
 }

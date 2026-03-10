@@ -32,7 +32,10 @@ public class TournamentServiceImpl implements TournamentService {
 
         Tournament tournament = Tournament.builder()
                 .name(request.getName())
+                .defaultBalance(request.getDefaultBalance())
                 .startDate(request.getStartDate())
+                .minPlayers(request.getMinPlayers())
+                .maxPlayers(request.getMaxPlayers())
                 .endDate(request.getEndDate())
                 .status(TournamentStatus.UPCOMING) // default
                 .build();
@@ -52,6 +55,9 @@ public class TournamentServiceImpl implements TournamentService {
     public TournamentResponse updateTournament(Long id,TournamentRequest request) {
         Tournament tournament = tournamentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member not found"));
         tournament.setName(request.getName());
+        tournament.setDefaultBalance(request.getDefaultBalance());
+        tournament.setMinPlayers(request.getMinPlayers());
+        tournament.setMaxPlayers(request.getMaxPlayers());
         Tournament saved =tournamentRepository.save(tournament);
 
         return mapToDto(saved);
@@ -86,6 +92,9 @@ public class TournamentServiceImpl implements TournamentService {
                 TournamentTeam mapping = TournamentTeam.builder()
                         .tournament(tournament)
                         .team(team)
+                        .balance(tournament.getDefaultBalance())
+                        .totalSpent(0D)
+                        .playersBought(0)
                         .build();
 
                 tournamentTeamRepository.save(mapping);
@@ -340,6 +349,7 @@ public class TournamentServiceImpl implements TournamentService {
             standingResponse.setWin(standing.getWin());
             standingResponse.setPlayed(standing.getPlayed());
             standingResponse.setGoalsFor(standing.getGoalsFor());
+            standingResponse.setPoints(standing.getPoints());
             list.add(standingResponse);
 
         }

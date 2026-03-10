@@ -2,6 +2,7 @@ package com.auction.backend.controller;
 
 import com.auction.backend.dto.BidRequest;
 import com.auction.backend.entity.Auction;
+import com.auction.backend.entity.AuctionPlayer;
 import com.auction.backend.service.AuctionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,12 @@ public class AuctionController {
 
     @PostMapping("/{auctionId}/players")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> addPlayerToAuction(
+    public ResponseEntity<AuctionPlayer> addPlayerToAuction(
             @PathVariable Long auctionId,
             @RequestParam Long playerId) {
 
-        auctionService.addPlayerToAuction(auctionId, playerId);
-        return ResponseEntity.ok("Player added successfully");
+       AuctionPlayer auctionPlayer= auctionService.addPlayerToAuction(auctionId, playerId);
+        return ResponseEntity.ok(auctionPlayer);
     }
 
     @PostMapping("/{auctionId}/start")
