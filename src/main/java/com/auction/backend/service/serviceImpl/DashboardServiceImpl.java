@@ -3,34 +3,40 @@ package com.auction.backend.service.serviceImpl;
 import com.auction.backend.dto.*;
 import com.auction.backend.entity.Members;
 import com.auction.backend.entity.User;
-import com.auction.backend.repository.MatchRepository;
-import com.auction.backend.repository.MembersRepository;
-import com.auction.backend.repository.TournamentTeamRepository;
-import com.auction.backend.repository.UserRepository;
+import com.auction.backend.repository.*;
 import com.auction.backend.service.DashboardService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
 @Service
+@RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
 
     private final UserRepository userRepository;
+    private final PlayerRepository playerRepository;
     private final MembersRepository membersRepository;
     private final TournamentTeamRepository tournamentTeamRepository;
+    private final AuctionRepository auctionRepository;
     private final MatchRepository matchRepository;
 
-    public DashboardServiceImpl(UserRepository userRepository, MembersRepository membersRepository, TournamentTeamRepository tournamentTeamRepository, MatchRepository matchRepository) {
-        this.userRepository = userRepository;
-        this.membersRepository = membersRepository;
-        this.tournamentTeamRepository = tournamentTeamRepository;
-        this.matchRepository = matchRepository;
+
+    @Override
+    public AdminDashboardResponse getAdminDashboard(Long id) {
+        AdminDashboardResponse response=new AdminDashboardResponse();
+        response.setTotalPlayers(playerRepository.count());
+        response.setTotalMembers(playerRepository.count());
+        response.setTotalTournaments(playerRepository.count());
+        response.setActiveAuctions(auctionRepository.count());
+
+        return response;
     }
 
     @Override
-    public DashboardResponse getDashboard(Long id) {
+    public MemberDashboardResponse getMemberDashboard(Long id) {
 
         // 1️⃣ Get logged user
         User user = userRepository.findById(id)
@@ -47,7 +53,7 @@ public class DashboardServiceImpl implements DashboardService {
         // If user not part of any tournament
         if (projections.isEmpty()) {
 
-            DashboardResponse response = new DashboardResponse();
+            MemberDashboardResponse response = new MemberDashboardResponse();
             response.setUserName(member.getName());
             response.setTeamName(member.getTeamName());
             response.setTournaments(Collections.emptyList());
@@ -93,7 +99,7 @@ public class DashboardServiceImpl implements DashboardService {
             }
             tournaments.add(dto);
         }
-        DashboardResponse response = new DashboardResponse();
+        MemberDashboardResponse response = new MemberDashboardResponse();
 
         response.setUserName(member.getName());
         response.setTeamName(member.getTeamName());

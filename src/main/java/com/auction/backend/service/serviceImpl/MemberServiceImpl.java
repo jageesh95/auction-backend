@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
         user.setEmail(request.getEmail());
         user.setMobile(request.getMobile());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.MEMBER);
+        user.setRole(request.getRole());
         user.setActive(true);
 
         userRepository.save(user);

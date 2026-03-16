@@ -1,6 +1,7 @@
 package com.auction.backend.controller;
 
-import com.auction.backend.dto.DashboardResponse;
+import com.auction.backend.dto.AdminDashboardResponse;
+import com.auction.backend.dto.MemberDashboardResponse;
 import com.auction.backend.security.JwtService;
 import com.auction.backend.service.DashboardService;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +19,22 @@ public class DashboardController {
     private final JwtService jwtService;
     private final DashboardService dashboardService;
 
-    @GetMapping("/dashboard")
-    public ResponseEntity<DashboardResponse> getDashboard(Authentication authentication){
+    @GetMapping("/dashboard/member")
+    public ResponseEntity<MemberDashboardResponse> getMemberDashboard(Authentication authentication){
 
         Long id= Long.valueOf(authentication.getName());
-        System.out.println("email: "+id);
-
-        DashboardResponse response =
-                dashboardService.getDashboard(id);
+        MemberDashboardResponse response =
+                dashboardService.getMemberDashboard(id);
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/dashboard/admin")
+    public ResponseEntity<AdminDashboardResponse> getAdminDashBoard(Authentication authentication){
+         Long id=Long.valueOf(authentication.getName());
+         AdminDashboardResponse response=dashboardService.getAdminDashboard(id);
+         return ResponseEntity.ok(response);
+    }
+
 
 }
