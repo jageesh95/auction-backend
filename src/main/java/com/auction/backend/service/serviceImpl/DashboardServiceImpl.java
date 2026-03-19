@@ -43,8 +43,8 @@ public class DashboardServiceImpl implements DashboardService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // 2️⃣ Get member/team
-        Members member = membersRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+        Members member = membersRepository.findByUserId(user.getId());
+
 
         // 3️⃣ Get tournament dashboard projection
         List<TournamentDashboardProjection> projections =
