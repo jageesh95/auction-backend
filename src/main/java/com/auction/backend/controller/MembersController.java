@@ -30,17 +30,18 @@ public class MembersController {
     }
 
     @GetMapping("/{id}")
-    public MembersDto getById(Long id){
+    public MembersDto getById(@PathVariable Long id){
         return memberService.getMember(id);
     }
 
     @PutMapping("/{id}")
-    public MembersDto update(Long id,MembersDto dto){
+    public MembersDto update(@PathVariable Long id,@RequestBody MembersDto dto)
+    {
         return memberService.updateMember(id,dto);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(Long id){
+    public void delete(@PathVariable Long id){
          memberService.deleteMember(id);
     }
 
