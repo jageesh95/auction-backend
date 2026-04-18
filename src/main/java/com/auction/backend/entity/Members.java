@@ -6,8 +6,7 @@ import lombok.*;
 @Entity
 @Table(name="members")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class Members {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -16,6 +15,7 @@ public class Members {
     private String teamName;
 
     @OneToOne
+
     @JoinColumn(name = "user_id")
     private User user;
 
